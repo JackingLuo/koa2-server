@@ -1,16 +1,10 @@
 /**
  * app.use就是执行一个个异步的中间件，所以需要await执行完毕之后在执行，执行顺序自上而下
  * koa-bodyparser 这个必须在router之前被注册到app对象上
- * 
- * vue三大模块：
- * 1.Observer:监听者，对data做监听，通过Object.defineProperty的setter方法来监听data数据变化。
- * 2.Watcher：观察者，data数据一旦发生改变，Observer会通过dep.notify通知（遍历）Watcher，调用watcher上绑定的update方法。因为JS是单线程，所以一次只能执行一个Watcher，
- * 其他的Watcher会自动推入队列中，在下一次nextTick更新之后再执行。
- * 3.directive:指令，先于watcher创建，指令解析成模板之后，创建Watcher并绑定对应的update方法。
- * 双向数据绑定的核心方法是：Object.defineProperty可以给对象新增/修改属性，它是对象的一种（存取）描述符。在vue中的作用就是给每个data添加getter和setter（存取）方法。
  */
 
 const Koa = require('koa');
+const mysql = require('mysql');
 const fs = require('fs');//fs模块
 const bodyParser = require('koa-bodyparser')//post请求格式化模块
 const Router = require("koa-router");//后端根据URL来进行配置的路由管理器
@@ -20,9 +14,33 @@ const views = require('koa-views');//模板引擎
 const app = new Koa();
 //分别创建两个不同的router实例，用于区分是返回页面还是纯粹的返回数据
 const router = new Router();
-// const api = new Router({
-//     prefix:'/api'
-// });
+
+//数据库操作
+const connection = mysql.createConnection({
+	host:'127.0.0.1',
+	user:'root',
+	password:'123456',  
+	database:'mydata'
+})
+let mysql_add = "SELECT * FROM website";
+function getWebsite(){
+    connection.connect(function (err) {
+        if(err){
+            console.log(err);
+            setTimeout(getWebsite,1000);  //经过1秒后尝试重新连接
+            return;
+        }
+    });
+}
+
+router.get('/website',async(ctx,next)=>{
+    getWebsite();
+    connection.query(mysql_add,function(error,results,fields){
+        if (error) throw error;
+        console.log('The solution is:', results);
+        ctx.body=results;
+    })
+})
 
 app.use(bodyParser());
 
@@ -62,6 +80,8 @@ router.get('/',async (ctx, next) => {
         })
     }
 })
+
+
 app.use(
     router.routes()
 )
