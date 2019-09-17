@@ -12,8 +12,10 @@ const fn_signin=async (ctx, next) => {
             overwrite:false  // 是否允许重写
         })
     } else {
-        ctx.response.body = `<h1>登陆失败!</h1>
-        <p><a href="/">重新登录</a></p>`;
+        let title = "重新登录";
+        await ctx.render('login', {
+            title
+        })
     }
     await next();
 }

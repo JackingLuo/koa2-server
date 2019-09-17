@@ -4,7 +4,6 @@
  */
 
 const Koa = require('koa');
-const mysql = require('mysql');
 const fs = require('fs');//fs模块
 const bodyParser = require('koa-bodyparser')//post请求格式化模块
 const Router = require("koa-router");//后端根据URL来进行配置的路由管理器
@@ -12,35 +11,8 @@ const path = require('path');
 const views = require('koa-views');//模板引擎
 
 const app = new Koa();
-//分别创建两个不同的router实例，用于区分是返回页面还是纯粹的返回数据
 const router = new Router();
 
-//数据库操作
-const connection = mysql.createConnection({
-	host:'127.0.0.1',
-	user:'root',
-	password:'123456',  
-	database:'mydata'
-})
-let mysql_add = "SELECT * FROM website";
-function getWebsite(){
-    connection.connect(function (err) {
-        if(err){
-            console.log(err);
-            setTimeout(getWebsite,1000);  //经过1秒后尝试重新连接
-            return;
-        }
-    });
-}
-
-router.get('/website',async(ctx,next)=>{
-    getWebsite();
-    connection.query(mysql_add,function(error,results,fields){
-        if (error) throw error;
-        console.log('The solution is:', results);
-        ctx.body=results;
-    })
-})
 
 app.use(bodyParser());
 
@@ -74,7 +46,7 @@ router.get('/',async (ctx, next) => {
         ctx.type="html";
         ctx.response.body=fs.createReadStream("view/index.html")
     }else{
-        let title = "登陆页面";
+        let title = "登陆首页";
         await ctx.render('login', {
             title
         })
