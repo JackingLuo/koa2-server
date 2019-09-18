@@ -4,9 +4,6 @@ MVC架子
 get post 请求功能
 cookie存储登陆信息
 
-依赖安装
-npm install
-
 
 项目运行
-npm run start
+npm run start 或  node main.js
