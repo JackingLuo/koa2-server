@@ -1,9 +1,16 @@
-koa2学习后台服务
-MVC架子
-实现功能：
-get post 请求功能
-cookie存储登陆信息
+koa2+mysql+vue+nuxt（上面的nuxt项目）
+
+Build Setup
+# install dependencies
+$ npm install
+
+# serve with hot reload at localhost:8099
+$ npm run start or $ node main.js
+
+# serve with hot reload at localhost:3000
+
+# 实现功能
+使用koa2做后台服务，运行打包过后的vue项目
 
 
-项目运行
-npm run start 或  node main.js
+

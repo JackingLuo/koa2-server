@@ -11,7 +11,7 @@ const fn_signin=async (ctx, next) => {
             ctx.cookies.set('isLogin','this is cont',{
                 domain:'127.0.0.1', // 写cookie所在的域名
                 path:'/',       // 写cookie所在的路径
-                maxAge:1000*60*60*24,   // cookie有效时长
+                maxAge:1000*60*60,   // cookie有效时长
                 expires:new Date('2019-12-31'), // cookie失效时间
                 httpOnly:false,  // 是否只用于http请求中获取
                 overwrite:false  // 是否允许重写
@@ -32,19 +32,35 @@ const fn_signin=async (ctx, next) => {
     }
     await next();
 }
-
+//根路由进入
 const fn_check =async (ctx, next)=>{
-    if(ctx.cookies.get('isLogin')){
+    // if(ctx.cookies.get('isLogin')){
         ctx.type="html";
         ctx.response.body=fs.createReadStream("view/index.html")
+    // }else{
+    //     let title = "登陆页面";
+    //     await ctx.render('login', {
+    //         title
+    //     })
+    // }
+}
+//校验用户的密码
+const fn_checkPsd=async (ctx,next)=>{
+    let password=ctx.request.body.password || '';
+    let sql_select = "SELECT password FROM users WHERE name='koa2'";
+    const [pasd]=await insert_sql(sql_select);
+    if(pasd){
+        if(pasd.password===password){
+            ctx.response.body={succ:true}
+        }else{
+            ctx.response.body={succ:false,err:'1',msg:'密码错误'}
+        }
     }else{
-        let title = "登陆页面";
-        await ctx.render('login', {
-            title
-        })
+        ctx.response.body={succ:false,err:'2',msg:'用户名不存在'}
     }
 }
 module.exports={
     "POST/signin":fn_signin,
-    "GET/":fn_check
+    "GET/":fn_check,
+    "POST/checkPsd":fn_checkPsd
 }
