@@ -12,16 +12,14 @@ const path = require('path');
 const views = require('koa-views');//模板引擎
 const router = require("./controllers/router");
 
-
 const app = new Koa();
 
 app.use(bodyParser());
-app.use(staticServer(path.join(__dirname,'./view'))); //设置静态文件，也可以说是设置服务的根目录（可直接在浏览器中访问，如图片）
+app.use(staticServer(path.join(__dirname,'./public'))); //设置静态文件，也可以说是设置服务的"/"目录（可直接在浏览器中访问，如图片）
 // 加载ejs模板引擎
-app.use(views(path.join(__dirname, './view'), {
+app.use(views(path.join(__dirname, './public/view'), {
     extension: 'ejs'
 }))
-
 
 
 //遍历mysql文件夹中所有的文件——为所有的路由和api注册相应的方法，过滤留下js文件
@@ -43,19 +41,6 @@ for(let val of jsFiles){
         }
     }
 }
-
-// router.get('/',async (ctx, next) => {
-//     console.log(ctx.cookies.get('isLogin'))
-//     if(ctx.cookies.get('isLogin')){
-//         ctx.type="html";
-//         ctx.response.body=fs.createReadStream("view/index.html")
-//     }else{
-//         let title = "登陆页面";
-//         await ctx.render('login', {
-//             title
-//         })
-//     }
-// })
 
 app.use(
     router.routes()

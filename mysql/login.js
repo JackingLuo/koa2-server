@@ -36,7 +36,7 @@ const fn_signin=async (ctx, next) => {
 const fn_check =async (ctx, next)=>{
     // if(ctx.cookies.get('isLogin')){
         ctx.type="html";
-        ctx.response.body=fs.createReadStream("view/index.html")
+        ctx.response.body=fs.createReadStream("public/view/index.html")
     // }else{
     //     let title = "登陆页面";
     //     await ctx.render('login', {

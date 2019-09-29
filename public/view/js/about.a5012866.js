@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["about"],{a120:function(n,e,t){"use strict";t.r(e);var a=function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("div",[n._v("\n    留言\n")])},u=[],c={name:"index"},i=c,o=t("2877"),r=Object(o["a"])(i,a,u,!1,null,"111208f4",null);e["default"]=r.exports}}]);
+//# sourceMappingURL=about.a5012866.js.map

@@ -5,9 +5,13 @@ const pool = mysql.createPool({
 	host:'127.0.0.1',
 	user:'root',
 	password:'123456',  
-	database:'mydata'
+	database:'myblog'
 })
 //增
+//用法:
+    // let sql = "INSERT INTO website(name,address) VALUE(?,?);";
+    // let values = ["阿里","www.alibaba.com"];
+    // let res = await insert_sql(sql,values);
 const insert_sql=(sql,values)=>{
     return new Promise((resolve,reject)=>{
         //创建连接池
