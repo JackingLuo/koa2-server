@@ -18,18 +18,18 @@ const fn_login=async(ctx,next)=>{
     //这里要新增一个是否激活的状态
     let sql_select = `SELECT password,isActive FROM users WHERE userName='${userName}'`;
     let [backInfo] = await insert_sql(sql_select);
-    if(backInfo.isActive){
-        if(backInfo.password){
+    if(backInfo){
+        if(backInfo.isActive){
             if(backInfo.password===password){
                 ctx.response.body={succ:true}
             }else{
                 ctx.response.body={succ:false,err:'1',errMsg:'密码错误'}
             }
         }else{
-            ctx.response.body={succ:false,err:'2',errMsg:'用户名不存在'}
+            ctx.response.body={succ:false,err:'2',errMsg:'该用户还没有激活,请进入申请邮箱激活账号'}
         }
     }else{
-        ctx.response.body={succ:false,err:'2',errMsg:'该用户还没有激活,请进入申请邮箱激活账号'}
+        ctx.response.body={succ:false,err:'2',errMsg:'用户名不存在'}
     }
     
 }
@@ -59,11 +59,11 @@ const fn_register=async(ctx,next)=>{
                 html: `<h2>请点击下面链接用以激活</h2> 
                 <a href="http://localhost:8099/api/regischeck?userName=${userName}">激活邮箱账号</a>`   
             };
-            sendMail(mailOptions)
+            sendMail(mailOptions);
             let sql_addUser= "INSERT INTO users(userName,email,password,isActive) VALUE(?,?,?,?)";
-            let values = [userName,email,password,false];
-            let res = await insert_sql(sql_addUser,values);
-            ctx.response.body=res;
+            let values = [userName,email,password,0];
+            let myRes = await insert_sql(sql_addUser,values);
+            ctx.response.body={succ:true,errMsg:"请去注册邮箱激活您的账号"};
         }
     }
 }

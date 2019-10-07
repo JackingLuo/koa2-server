@@ -18,8 +18,7 @@ const fn_uploadImg=async(ctx,next)=>{
             'code':'1',
             'url': 'http://localhost:8099/uploads/'+ctx.req.file.filename//返回文件名
         }
-    }
-    
+    }  
 }
 module.exports={
     "POST/upload/image":fn_uploadImg
