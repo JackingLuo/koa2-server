@@ -1,14 +1,14 @@
 /**
  * 注册邮箱校验,用户登录,用户注册
  */
-const insert_sql = require("../controllers/mysql.config.js");
+let insert_sql = require("../controllers/mysql.config.js");
 const sendMail = require("../controllers/nodemailer.js");//邮箱发送注册码
 
 //接收邮箱激活,激活账号
 const fn_regischeck=async(ctx,next)=>{
     let userName=ctx.query.userName || '';
     let sql_activeUser= `UPDATE users SET isActive = 1 WHERE userName = '${userName}'`;
-    let res = await insert_sql(sql_activeUser);
+    let [res] = await insert_sql(sql_activeUser);
     ctx.response.body=res;
 }
 //用户登录
@@ -16,12 +16,12 @@ const fn_login=async(ctx,next)=>{
     let userName=ctx.request.body.userName || '';
     let password=ctx.request.body.password || '';
     //这里要新增一个是否激活的状态
-    let sql_select = `SELECT password,isActive FROM users WHERE userName='${userName}'`;
+    let sql_select = `SELECT * FROM users WHERE userName='${userName}'`;
     let [backInfo] = await insert_sql(sql_select);
     if(backInfo){
         if(backInfo.isActive){
             if(backInfo.password===password){
-                ctx.response.body={succ:true}
+                ctx.response.body={succ:true,data:{userId:backInfo.id,iserName:backInfo.userName,email:backInfo.email}}
             }else{
                 ctx.response.body={succ:false,err:'1',errMsg:'密码错误'}
             }
