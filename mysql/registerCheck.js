@@ -9,7 +9,11 @@ const fn_regischeck=async(ctx,next)=>{
     let userName=ctx.query.userName || '';
     let sql_activeUser= `UPDATE users SET isActive = 1 WHERE userName = '${userName}'`;
     let [res] = await insert_sql(sql_activeUser);
-    ctx.response.body=res;
+    if(res){
+        ctx.response.body={succ:true,msg:"激活成功,请您继续登录"};
+    }else{
+        ctx.response.body={succ:false,msg:"激活失败,请重新点击链接进行激活"};
+    }
 }
 //用户登录
 const fn_login=async(ctx,next)=>{
