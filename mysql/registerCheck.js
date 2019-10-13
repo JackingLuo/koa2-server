@@ -31,6 +31,7 @@ const fn_login=async(ctx,next)=>{
             }
         }else{
             ctx.response.body={succ:false,err:'2',errMsg:'该用户还没有激活,请进入申请邮箱激活账号'}
+            
         }
     }else{
         ctx.response.body={succ:false,err:'2',errMsg:'用户名不存在'}
