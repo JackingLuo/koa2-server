@@ -25,7 +25,7 @@ const fn_login=async(ctx,next)=>{
     if(backInfo){
         if(backInfo.isActive){
             if(backInfo.password===password){
-                ctx.response.body={succ:true,data:{userId:backInfo.id,iserName:backInfo.userName,email:backInfo.email}}
+                ctx.response.body={succ:true,data:{userId:backInfo.id,userName:backInfo.userName,email:backInfo.email}}
             }else{
                 ctx.response.body={succ:false,err:'1',errMsg:'密码错误'}
             }

@@ -1,3 +1,6 @@
+/**
+ * 富文本信息存储接口
+ */
 let insert_sql = require("../controllers/mysql.config.js");
 const fn_storageeditor = async(ctx,next)=>{
     let title = ctx.request.body.title || '';

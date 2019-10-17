@@ -1,3 +1,6 @@
+/**
+ * 博客初始返回接口
+ */
 const fs = require('fs');//fs模块
 const insert_sql = require("../controllers/mysql.config.js");
 
