@@ -1,5 +1,5 @@
 /**
- * 富文本信息存储接口
+ * 文章发表(富文本信息存储)接口
  */
 let insert_sql = require("../controllers/mysql.config.js");
 const fn_storageeditor = async(ctx,next)=>{

@@ -17,9 +17,7 @@ const app = new Koa();
 app.use(bodyParser());
 app.use(staticServer(path.join(__dirname,'./public'))); //设置静态文件，也可以说是设置服务的"/"目录（可直接在浏览器中访问，如图片）
 // 加载ejs模板引擎
-app.use(views(path.join(__dirname, './public/view'), {
-    extension: 'ejs'
-}))
+app.use(views(path.join(__dirname, './public/view')))
 
 
 //遍历mysql文件夹中所有的文件——为所有的路由和api注册相应的方法，过滤留下js文件

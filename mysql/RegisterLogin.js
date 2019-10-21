@@ -25,6 +25,16 @@ const fn_login=async(ctx,next)=>{
     if(backInfo){
         if(backInfo.isActive){
             if(backInfo.password===password){
+                // ctx.cookies.set('isLogin','this is cont',{
+                //     domain:'127.0.0.1', // 写cookie所在的域名
+                //     path:'/',       // 写cookie所在的路径
+                //     maxAge:1000*60*60,   // cookie有效时长
+                //     expires:new Date('2019-12-31'), // cookie失效时间
+                //     httpOnly:false,  // 是否只用于http请求中获取
+                //     overwrite:false  // 是否允许重写
+                // })
+                // //登陆成功重定向到'/'路由
+                // ctx.response.redirect('/');
                 ctx.response.body={succ:true,data:{userId:backInfo.id,userName:backInfo.userName,email:backInfo.email}}
             }else{
                 ctx.response.body={succ:false,err:'1',errMsg:'密码错误'}
