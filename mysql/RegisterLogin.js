@@ -3,6 +3,7 @@
  */
 let insert_sql = require("../controllers/mysql.config.js");
 const sendMail = require("../controllers/nodemailer.js");//邮箱发送注册码
+let tokenConfig = require("../controllers/token.js");
 
 //接收邮箱激活,激活账号
 const fn_regischeck=async(ctx,next)=>{
@@ -25,17 +26,10 @@ const fn_login=async(ctx,next)=>{
     if(backInfo){
         if(backInfo.isActive){
             if(backInfo.password===password){
-                // ctx.cookies.set('isLogin','this is cont',{
-                //     domain:'127.0.0.1', // 写cookie所在的域名
-                //     path:'/',       // 写cookie所在的路径
-                //     maxAge:1000*60*60,   // cookie有效时长
-                //     expires:new Date('2019-12-31'), // cookie失效时间
-                //     httpOnly:false,  // 是否只用于http请求中获取
-                //     overwrite:false  // 是否允许重写
-                // })
-                // //登陆成功重定向到'/'路由
-                // ctx.response.redirect('/');
-                ctx.response.body={succ:true,data:{userId:backInfo.id,userName:backInfo.userName,email:backInfo.email}}
+                let data = {userId:backInfo.id,userName:backInfo.userName,email:backInfo.email};
+                //使用token
+                let token = tokenConfig.set_token({userName:backInfo.userName,time:new Date().getTime(),timeout:1000*60*60})
+                ctx.response.body={succ:true,data,token}
             }else{
                 ctx.response.body={succ:false,err:'1',errMsg:'密码错误'}
             }

@@ -1,4 +1,4 @@
-koa2+mysql+vue+nuxt（上面的nuxt项目）
+koa2+mysql+vue+bootstrap（上面的bootstrap-vue项目）
 
 Build Setup
 # install dependencies

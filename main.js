@@ -14,6 +14,7 @@ const router = require("./controllers/router");
 
 const app = new Koa();
 
+
 app.use(bodyParser());
 app.use(staticServer(path.join(__dirname,'./public'))); //设置静态文件，也可以说是设置服务的"/"目录（可直接在浏览器中访问，如图片）
 // 加载ejs模板引擎

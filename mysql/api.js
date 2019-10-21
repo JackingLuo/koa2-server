@@ -2,6 +2,7 @@
  * 其他的api请求(注意:get请求获取入参是用ctx.query,post用的是ctx.request.body)
  */
 const insert_sql = require("../controllers/mysql.config.js");
+let tokenConfig = require("../controllers/token.js");
 
 //查询所有文章列表接口
 const all_article = async (ctx, next) => {
@@ -9,6 +10,10 @@ const all_article = async (ctx, next) => {
     let sql_select = "SELECT articles.*,users.userName FROM articles left join users on articles.userId=users.id;";
     let backInfo =  await insert_sql(sql_select);
     if(backInfo){
+        //解码
+        // let token = ctx.request.headers["token"];
+        // let payload = tokenConfig.get_info(token);
+        // console.log(payload)
         ctx.response.body = {succ:true,data:backInfo}
     }else{
         ctx.response.body={succ:false,errMsg:'文章列表为空',errCode:222};
