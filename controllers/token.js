@@ -3,18 +3,34 @@
  */
 const jwt = require('jsonwebtoken');
 const serect = 'luojx';
-const set_token = (userInfo)=>{
-    let token = jwt.sign(userInfo, serect);
+//设置token
+const set_token = (userInfo) => {
+    let token = jwt.sign(userInfo, serect,{ expiresIn: 60 * 60 * 24 *7 });//过期时间设置7天
     return token
 }
-const get_info = (token)=>{
-    if (token){
-        // 解析,iat表示jwt的签发时间
-        let decoded = jwt.verify(token,serect)
-        return decoded;
-      }
+//解码,校验token
+const check_token = (token) => {
+    if (token) {
+        //验证token,iat表示jwt签发token的时间
+        return jwt.verify(token, serect,(err, decoded) => {
+            if (err) {
+                switch (err.name) {
+                case 'JsonWebTokenError':
+                    return { succ:false, errMsg: '无效的token,请重新登录' }
+                    break;
+                case 'TokenExpiredError':
+                    return { succ:false, errMsg: 'token过期,请重新登录' }
+                    break;
+                default:
+                    return {succ:false,errMsg:"token验证失败,建议重新登录"}
+                }
+            }else{
+                return {succ:true,decoded}
+            }
+        })
+    }
 }
-module.exports= {
+module.exports = {
     set_token,
-    get_info
+    check_token
 }

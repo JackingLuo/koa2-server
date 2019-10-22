@@ -28,7 +28,7 @@ const fn_login=async(ctx,next)=>{
             if(backInfo.password===password){
                 let data = {userId:backInfo.id,userName:backInfo.userName,email:backInfo.email};
                 //使用token
-                let token = tokenConfig.set_token({userName:backInfo.userName,time:new Date().getTime(),timeout:1000*60*60})
+                let token = tokenConfig.set_token({userName:backInfo.userName,timeout:1000*60*60})
                 ctx.response.body={succ:true,data,token}
             }else{
                 ctx.response.body={succ:false,err:'1',errMsg:'密码错误'}
