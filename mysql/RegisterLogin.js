@@ -66,7 +66,7 @@ const fn_register=async(ctx,next)=>{
                 subject: '用户激活邮件', // 标题  
                 text: '感谢您注册鄙人博客的账号!', // 文本  
                 html: `<h2>请点击下面链接用以激活</h2> 
-                <a href="http://localhost:8099/api/regischeck?userName=${userName}">激活邮箱账号</a>`   
+                <a href="http://114.55.28.66:8099/api/regischeck?userName=${userName}">激活邮箱账号</a>`   
             };
             sendMail(mailOptions);
             let sql_addUser= "INSERT INTO users(userName,email,password,isActive) VALUE(?,?,?,?)";
@@ -76,6 +76,8 @@ const fn_register=async(ctx,next)=>{
         }
     }
 }
+//后端生成二维码
+
 module.exports={
     "GET/api/regischeck":fn_regischeck,
     "POST/api/login":fn_login,

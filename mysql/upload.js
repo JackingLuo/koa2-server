@@ -16,7 +16,7 @@ const fn_uploadImg=async(ctx,next)=>{
         // CKEditor5上传完照片必须返回json数据
         ctx.body = {
             'code':'1',
-            'url': 'http://localhost:8099/uploads/'+ctx.req.file.filename//返回文件名
+            'url': 'http://114.55.28.66/uploads/'+ctx.req.file.filename//返回文件名
         }
     }  
 }

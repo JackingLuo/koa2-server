@@ -2,7 +2,7 @@
 const　mysql = require('mysql');
 //数据库基本配置
 const pool = mysql.createPool({
-	host:'127.0.0.1',
+	host:'localhost',//放到服务器也是localhost
 	user:'root',
 	password:'123456',  
 	database:'myblog'

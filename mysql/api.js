@@ -37,6 +37,10 @@ const query_article = async (ctx, next) => {
 const add_reply = async (ctx, next) => {
     //验证token
     let token = ctx.request.headers["token"];
+    if(!token){
+        ctx.response.body = { succ: false, errMsg: "token值不存在" };
+        return
+    }
     let checkBack = tokenConfig.check_token(token);
     if (checkBack.succ) {
         let userId = ctx.request.body.userId || '';
@@ -133,6 +137,10 @@ const query_reply = async (ctx, next) => {
 const post_goods = async (ctx, next) => {
     //验证token
     let token = ctx.request.headers["token"];
+    if(!token){
+        ctx.response.body = { succ: false, errMsg: "token值不存在" };
+        return
+    }
     let checkBack = tokenConfig.check_token(token);
     if (checkBack.succ) {
         let msgId = ctx.request.body.msgId || '';

@@ -46,4 +46,4 @@ app.use(
 )
 app.listen(8099);
 
-console.log('starting at 8099');
+console.log('Server running at http://127.0.0.1:8099/');
