@@ -6,11 +6,24 @@ let tokenConfig = require("../controllers/token.js");
 
 //查询所有文章列表接口
 const all_article = async (ctx, next) => {
+    //分页查询需要知道总数和当前是第几列,一列多少行数据
+    let currentPage = ctx.request.body.currentPage || 1;
+    let nums = ctx.request.body.nums || 10;
+    let start = (currentPage - 1) * nums;//从第 start 条记录开始, 返回 nums 条记录
+
     //后期加一个说明字段,再不返回所有的内容
-    let sql_select = "SELECT articles.*,users.userName FROM articles left join users on articles.userId=users.id;";
+    let sql_select = `SELECT articles.*,users.userName FROM articles left join users on articles.userId=users.id limit ${nums} offset ${start}`;
+    //查询数据量总数
+    let sql_total = "SELECT COUNT(*) as total FROM articles";
+
     let backInfo = await insert_sql(sql_select);
     if (backInfo) {
-        ctx.response.body = { succ: true, data: backInfo }
+        let [totals] = await insert_sql(sql_total);
+        if(totals){
+            ctx.response.body = { succ: true, data: backInfo,totals:totals.total }
+        }else{
+            ctx.response.body = { succ: false, errMsg: '查询文章总数失败。' }
+        }
     } else {
         ctx.response.body = { succ: false, errMsg: '文章列表为空', errCode: 222 };
     }
@@ -62,8 +75,8 @@ const add_reply = async (ctx, next) => {
 //查询留言接口
 const query_reply = async (ctx, next) => {
     //分页查询需要知道总数和当前是第几列,一列多少行数据
-    let currentPage = ctx.request.body.currentPage || '';
-    let nums = ctx.request.body.nums || '';
+    let currentPage = ctx.request.body.currentPage || 1;
+    let nums = ctx.request.body.nums || 10;
 
     //查询对应页的nums条数据的一级留言数据
     let start = (currentPage - 1) * nums;//从第 start 条记录开始, 返回 nums 条记录

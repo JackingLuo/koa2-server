@@ -1,6 +1,8 @@
 const nodemailer = require('nodemailer');//邮箱发送激活码
 const transporter = nodemailer.createTransport({  
-    service: 'qq',  
+    service: 'qq', 
+    port: 465, // SMTP 端口
+    secureConnection: true, // 使用 SSL
     auth: {  
       user: '781642016@qq.com',  
       pass: 'pidzpnzirxpobdjc' //授权码,通过QQ获取  

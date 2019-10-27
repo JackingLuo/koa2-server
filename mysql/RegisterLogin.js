@@ -9,8 +9,8 @@ let tokenConfig = require("../controllers/token.js");
 const fn_regischeck=async(ctx,next)=>{
     let userName=ctx.query.userName || '';
     let sql_activeUser= `UPDATE users SET isActive = 1 WHERE userName = '${userName}'`;
-    let [res] = await insert_sql(sql_activeUser);
-    if(res){
+    let backInfo = await insert_sql(sql_activeUser);
+    if(backInfo){
         ctx.response.body={succ:true,msg:"激活成功,请您继续登录"};
     }else{
         ctx.response.body={succ:false,msg:"激活失败,请重新点击链接进行激活"};
@@ -63,10 +63,10 @@ const fn_register=async(ctx,next)=>{
             let mailOptions = {  
                 from: '781642016@qq.com', // 发送者  
                 to: email, // 接受者,可以同时发送多个,以逗号隔开  
-                subject: '用户激活邮件', // 标题  
-                text: '感谢您注册鄙人博客的账号!', // 文本  
-                html: `<h2>请点击下面链接用以激活</h2> 
-                <a href="http://114.55.28.66:8099/api/regischeck?userName=${userName}">激活邮箱账号</a>`   
+                subject: '账号注册激活邮件', // 标题 
+                html: `<h2>Welcome</h2>
+                <p>欢迎注册我的博客账号，请点击下面标签用以激活邮箱。</p>
+                <a href="http://114.55.28.66:8099/api/regischeck?userName=${userName}">点此激活账号哦~亲</a>`   
             };
             sendMail(mailOptions);
             let sql_addUser= "INSERT INTO users(userName,email,password,isActive) VALUE(?,?,?,?)";
@@ -76,7 +76,6 @@ const fn_register=async(ctx,next)=>{
         }
     }
 }
-//后端生成二维码
 
 module.exports={
     "GET/api/regischeck":fn_regischeck,
