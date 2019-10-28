@@ -6,7 +6,7 @@ let tokenConfig = require("../controllers/token.js");
 const fn_storageeditor = async (ctx, next) => {
     let token = ctx.request.headers["token"];
     if(!token){
-        ctx.response.body = { succ: false, errMsg: "token值不存在" };
+        ctx.response.body = { succ: false, errMsg: "token值不存在",errCode:666 };
         return
     }
     let checkBack = tokenConfig.check_token(token);
@@ -20,7 +20,6 @@ const fn_storageeditor = async (ctx, next) => {
         } else {
             let editor_sql = "INSERT INTO articles(userId,title,articleHtml,uploadDate) VALUE(?,?,?,?)";
             let values = [userId, title, editor, uploadDate];
-            console.log(values)
             let addBack = await insert_sql(editor_sql, values);
             if (addBack) {
                 ctx.response.body = { succ: true };

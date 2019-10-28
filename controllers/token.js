@@ -16,13 +16,13 @@ const check_token = (token) => {
             if (err) {
                 switch (err.name) {
                 case 'JsonWebTokenError':
-                    return { succ:false, errMsg: '无效的token,请重新登录' }
+                    return { succ:false, errMsg: '无效的token,请重新登录',errCode:666 }
                     break;
                 case 'TokenExpiredError':
-                    return { succ:false, errMsg: 'token过期,请重新登录' }
+                    return { succ:false, errMsg: 'token过期,请重新登录',errCode:666 }
                     break;
                 default:
-                    return {succ:false,errMsg:"token验证失败,建议重新登录"}
+                    return {succ:false,errMsg:"token验证失败,建议重新登录",errCode:666}
                 }
             }else{
                 return {succ:true,decoded}

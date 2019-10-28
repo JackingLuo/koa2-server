@@ -51,7 +51,7 @@ const add_reply = async (ctx, next) => {
     //验证token
     let token = ctx.request.headers["token"];
     if(!token){
-        ctx.response.body = { succ: false, errMsg: "token值不存在" };
+        ctx.response.body = { succ: false, errMsg: "token值不存在",errCode:666 };
         return
     }
     let checkBack = tokenConfig.check_token(token);
@@ -151,7 +151,7 @@ const post_goods = async (ctx, next) => {
     //验证token
     let token = ctx.request.headers["token"];
     if(!token){
-        ctx.response.body = { succ: false, errMsg: "token值不存在" };
+        ctx.response.body = { succ: false, errMsg: "token值不存在",errCode:666 };
         return
     }
     let checkBack = tokenConfig.check_token(token);
