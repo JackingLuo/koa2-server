@@ -12,7 +12,7 @@ const all_article = async (ctx, next) => {
     let start = (currentPage - 1) * nums;//从第 start 条记录开始, 返回 nums 条记录
 
     //后期加一个说明字段,再不返回所有的内容
-    let sql_select = `SELECT articles.*,users.userName FROM articles left join users on articles.userId=users.id limit ${nums} offset ${start}`;
+    let sql_select = `SELECT articles.*,users.userName,users.nickName FROM articles left join users on articles.userId=users.id limit ${nums} offset ${start}`;
     //查询数据量总数
     let sql_total = "SELECT COUNT(*) as total FROM articles";
 
@@ -33,7 +33,7 @@ const all_article = async (ctx, next) => {
 const query_article = async (ctx, next) => {
     let id = ctx.query.id || '';
     //查询文章详情
-    let sql_select = `SELECT articles.*,users.userName FROM articles left join users on articles.userId=users.id WHERE articles.id=${id}`;
+    let sql_select = `SELECT articles.*,users.userName,users.nickName FROM articles left join users on articles.userId=users.id WHERE articles.id=${id}`;
     //添加阅读量
     let add_read = `UPDATE articles SET readNum = readNum + 1 WHERE id=${id}`;
     let [backInfo] = await insert_sql(sql_select);
@@ -80,10 +80,10 @@ const query_reply = async (ctx, next) => {
 
     //查询对应页的nums条数据的一级留言数据
     let start = (currentPage - 1) * nums;//从第 start 条记录开始, 返回 nums 条记录
-    let sql_query = `SELECT messages.*,users.userName,users.email,users.head_img FROM messages left join users on messages.user_id=users.id where messages.parent_id=0 limit ${nums} offset ${start}`;
+    let sql_query = `SELECT messages.*,users.userName,users.email,users.head_img,users.nickName FROM messages left join users on messages.user_id=users.id where messages.parent_id=0 limit ${nums} offset ${start}`;
 
     //查询所有回复留言数据
-    let sql_child = "SELECT messages.*,users.userName,users.email,users.head_img FROM messages left join users on messages.user_id=users.id WHERE messages.parent_id!=0";
+    let sql_child = "SELECT messages.*,users.userName,users.email,users.head_img,users.nickName FROM messages left join users on messages.user_id=users.id WHERE messages.parent_id!=0";
     //查询所有激活的点赞数
     let sql_goods = "SELECT * FROM msg_goods WHERE isOk!=0";
 
@@ -225,11 +225,43 @@ const get_statistics = async (ctx, next) => {
     }
 }
 //修改浏览量
-let add_browseNum = async (ctx, next) => {
+const add_browseNum = async (ctx, next) => {
     let sql_update = "UPDATE statistics SET browseNum = browseNum + 1 WHERE id = 1";
     let addSucc = await insert_sql(sql_update);
     if (addSucc) {
         ctx.response.body = { succ: true }
+    }
+}
+//修改用户信息
+const update_user=async (ctx,next)=>{
+    let userId = ctx.request.body.userId || '';
+    let userName = ctx.request.body.userName || '';
+    let nickName = ctx.request.body.nickName || '';
+    let sex = ctx.request.body.sex || '1';
+    let sql_user=`UPDATE users SET userName = ?,nickName = ?,sex = ? WHERE id = ${userId};`
+    let sql_get = `SELECT * FROM users WHERE id='${userId}'`;
+    let values= [userName,nickName,sex];
+    let updateSucc = await insert_sql(sql_user,values);
+    if (updateSucc) {
+        let [backInfo] = await insert_sql(sql_get);
+        if(backInfo){
+            let headImg = null,nickName = null,sex=null;
+            if(backInfo.head_img){
+                headImg = backInfo.head_img
+            }
+            if(backInfo.nickName){
+                nickName = backInfo.nickName
+            }
+            if(backInfo.sex){
+                sex = backInfo.sex
+            }
+            let data = {userId:backInfo.id,userName:backInfo.userName,email:backInfo.email,headImg,nickName,sex};  
+            ctx.response.body = { succ: true,data }
+        }else{
+            ctx.response.body = { succ: false,errMsg:"重新查询用户信息失败."} 
+        }
+    }else{
+        ctx.response.body = { succ: false,errMsg:"服务器报错,修改信息失败." }
     }
 }
 module.exports = {
@@ -239,5 +271,6 @@ module.exports = {
     "POST/api/queryReply": query_reply,
     "POST/api/goods": post_goods,
     "GET/api/statistics": get_statistics,
-    "GET/api/browse": add_browseNum
+    "GET/api/browse": add_browseNum,
+    "POST/api/updateUser":update_user
 }

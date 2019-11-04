@@ -26,7 +26,17 @@ const fn_login=async(ctx,next)=>{
     if(backInfo){
         if(backInfo.isActive){
             if(backInfo.password===password){
-                let data = {userId:backInfo.id,userName:backInfo.userName,email:backInfo.email};
+                let headImg = null,nickName = null,sex=null;
+                if(backInfo.head_img){
+                    headImg = backInfo.head_img
+                }
+                if(backInfo.nickName){
+                    nickName = backInfo.nickName
+                }
+                if(backInfo.sex){
+                    sex = backInfo.sex
+                }
+                let data = {userId:backInfo.id,userName:backInfo.userName,email:backInfo.email,headImg,nickName,sex};
                 //使用token
                 let token = tokenConfig.set_token({userName:backInfo.userName,timeout:1000*60*60})
                 ctx.response.body={succ:true,data,token}
