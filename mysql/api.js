@@ -264,6 +264,32 @@ const update_user=async (ctx,next)=>{
         ctx.response.body = { succ: false,errMsg:"服务器报错,修改信息失败." }
     }
 }
+//修改头像信息
+const up_head=async (ctx,next)=>{
+    let userId = ctx.request.body.userId || '';
+    let headImg = ctx.request.body.headImg || '';
+    let sql_head=`UPDATE users SET head_img = ? WHERE id = ${userId};`
+    let sql_get = `SELECT * FROM users WHERE id='${userId}'`;
+    let values= [headImg];
+    let isSucc = await insert_sql(sql_head,values);
+    if(isSucc){
+        let [backInfo] = await insert_sql(sql_get);
+        if(backInfo){
+            let headImg = null,nickName = null,sex=null;
+            if(backInfo.head_img){
+                headImg = backInfo.head_img
+            }
+            if(backInfo.nickName){
+                nickName = backInfo.nickName
+            }
+            if(backInfo.sex){
+                sex = backInfo.sex
+            }
+            let data = {userId:backInfo.id,userName:backInfo.userName,email:backInfo.email,headImg,nickName,sex};  
+            ctx.response.body = { succ: true,data }
+        }
+    }
+}
 module.exports = {
     "GET/api/allArticle": all_article,
     "GET/api/queryArticle": query_article,
@@ -272,5 +298,6 @@ module.exports = {
     "POST/api/goods": post_goods,
     "GET/api/statistics": get_statistics,
     "GET/api/browse": add_browseNum,
-    "POST/api/updateUser":update_user
+    "POST/api/updateUser":update_user,
+    "POST/api/updateHeadImg":up_head
 }
