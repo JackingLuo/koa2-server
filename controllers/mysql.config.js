@@ -4,7 +4,7 @@ const　mysql = require('mysql');
 const pool = mysql.createPool({
 	host:'localhost',//放到服务器也是localhost
 	user:'root',
-	password:'ljx11909140.X',  
+	password:'123456',
 	database:'myblog'
 })
 //增
