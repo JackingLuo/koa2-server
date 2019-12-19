@@ -1,0 +1,5 @@
+
+> study@1.0.0 start /myfile/blog
+> node main.js
+
+Server running at http://127.0.0.1:8099/
